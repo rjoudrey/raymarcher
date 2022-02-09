@@ -11,6 +11,7 @@
 				"-o",
 				"out/main",
 				"main.c",
+				"math.c",
 				"bitmap.c",
 				"-lm",
 			],

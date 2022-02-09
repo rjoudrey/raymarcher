@@ -1,0 +1,9 @@
+{
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.runAutomatically": true,
+    "C_Cpp.codeAnalysis.clangTidy.checks.enabled": [
+        "google-*"
+    ],
+    "C_Cpp.clang_format_style": "google",
+    "editor.formatOnSave": true
+}

@@ -3,17 +3,19 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
-			"label": "C/C++: gcc build active file",
+			"label": "Build main",
 			"command": "/usr/bin/gcc",
 			"args": [
 				"-fdiagnostics-color=always",
+				"-g",
 				"-o",
 				"out/main",
 				"main.c",
 				"bitmap.c",
+				"-lm",
 			],
 			"options": {
-				"cwd": "${fileDirname}"
+				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": [
 				"$gcc"

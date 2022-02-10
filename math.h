@@ -1,6 +1,8 @@
 #ifndef MATH_H
 #define MATH_H
 
+#define SDF_EPSILON 0.0001
+
 typedef struct Point {
   float x, y, z;
 } Point;
@@ -34,17 +36,22 @@ Vector directionFromPointToPoint(Point start, Point end);
 
 float pointDistanceFromOrigin(Point target);
 
+// Travels from the ray's origin in the ray's direction, passing the current
+// point into the specified SDF function. Returns 1 if an intersection was
+// found, and returns the intersection point.
+typedef float (*SDF)(Point);
+int rayMarch(Ray ray, SDF SDF, Point *intersectionPoint);
+
+// Finds the normal for a point. This is a implemented using the generic
+// approach of integrating over the signed distance function.
+Vector normalForPointAndSDF(Point p, SDF SDF);
+
+/**
+ * Signed distance functions. More info at:
+ * https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
+ */
+
 // The signed distance function for a sphere with the specified radius.
 float sphereSDF(Point p, float radius);
-
-// This function checks whether a ray intersects with a sphere at the origin
-// with the specified radius, and returns the intersection point through a
-// pointer. This is implemented via ray marching and signed distance functions.
-int rayIntersectsSphere(Ray ray, float radius, Point *intersectionPoint);
-
-// This function returns the normal associated with a particular point on the
-// sphere. This is a implemented using the generic approach of integrating over
-// the signed distance function.
-Vector sphereNormal(Point p, float radius);
 
 #endif /* MATH_H */

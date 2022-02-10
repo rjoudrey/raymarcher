@@ -20,6 +20,8 @@ const float kSpecularColor = 0.04;
 const float kSpecularCutoff = 0.99;
 const int kMaxBrightness = 0xFF;
 
+float sceneSDF(Point point) { return sphereSDF(point, kSphereRadius); }
+
 int main() {
   Pixel pixels[kNumPixelRows * kNumPixelColumns];
   for (int pixelRow = 0; pixelRow < kNumPixelRows; ++pixelRow) {
@@ -46,14 +48,12 @@ int main() {
             directionFromPointToPoint(kCameraPosition, pixelPoint);
         Ray ray = {.origin = kCameraPosition, .direction = directionToPixel};
         Point intersectionPoint;
-        if (!rayIntersectsSphere(ray, kSphereRadius, &intersectionPoint)) {
+        if (!rayMarch(ray, sceneSDF, &intersectionPoint)) {
           continue;
         }
-        Vector normal = sphereNormal(intersectionPoint, kSphereRadius);
-        Vector intersectionPointToLight = normalizedVector(
-            (Vector){.x = kLightPosition.x - intersectionPoint.x,
-                     .y = kLightPosition.y - intersectionPoint.y,
-                     .z = kLightPosition.z - intersectionPoint.z});
+        Vector normal = normalForPointAndSDF(intersectionPoint, sceneSDF);
+        Vector intersectionPointToLight =
+            directionFromPointToPoint(intersectionPoint, kLightPosition);
 
         // dp = 1.0 means the vectors have the same direction.
         // dp = -1.0 means the vectors have opposite directions.

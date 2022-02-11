@@ -3,6 +3,22 @@
 #include <math.h>
 #include <stdint.h>
 
+#define SDF_EPSILON 0.0001
+
+const Point kPointOrigin = {.x = 0.0, .y = 0.0, .z = 0.0};
+
+Point makePoint(float x, float y, float z) {
+  return (Point){.x = x, .y = y, .z = z};
+}
+
+Vector makeVector(float x, float y, float z) {
+  return (Vector){.x = x, .y = y, .z = z};
+}
+
+Ray makeRay(Point origin, Vector direction) {
+  return (Ray){.origin = origin, .direction = direction};
+}
+
 float min(float a, float b) { return a < b ? a : b; }
 
 float max(float a, float b) { return a > b ? a : b; }
@@ -33,17 +49,28 @@ Vector normalizedVector(Vector vector) {
       .x = vector.x / length, .y = vector.y / length, .z = vector.z / length};
 }
 
-Vector directionFromPointToPoint(Point start, Point end) {
-  return normalizedVector((Vector){
+Vector vectorFromPointToPoint(Point start, Point end) {
+  return (Vector){
       .x = end.x - start.x,
       .y = end.y - start.y,
       .z = end.z - start.z,
-  });
+  };
+}
+
+Vector vectorFromOriginToPoint(Point point) {
+  return vectorFromPointToPoint(kPointOrigin, point);
+}
+
+Point vectorToPoint(Vector vector) {
+  return makePoint(vector.x, vector.y, vector.z);
+}
+
+Vector directionFromPointToPoint(Point start, Point end) {
+  return normalizedVector(vectorFromPointToPoint(start, end));
 }
 
 float pointDistanceFromOrigin(Point target) {
-  Vector v = {.x = target.x, .y = target.y, .z = target.z};
-  return vectorLength(v);
+  return vectorLength(vectorFromOriginToPoint(target));
 }
 
 int rayMarch(Ray ray, SDF SDF, Point *intersectionPoint) {
@@ -73,6 +100,12 @@ Vector normalForPointAndSDF(Point p, SDF SDF) {
   return normalizedVector((Vector){.x = x, .y = y, .z = z});
 }
 
+float unionOp(float v1, float v2) { return min(v1, v2); }
+
 float sphereSDF(Point p, float radius) {
   return pointDistanceFromOrigin(p) - radius;
+}
+
+float planeSDF(Point p, Vector normal, float h) {
+  return dotProduct(vectorFromOriginToPoint(p), normal) + h;
 }

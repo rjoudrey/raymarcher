@@ -28,6 +28,10 @@ typedef struct {
   uint32_t numImportantColorsUsed;
 } BitmapInfoHeader;
 
+Pixel makePixel(uint8_t r, uint8_t g, uint8_t b) {
+  return (Pixel){.r = r, .g = g, .b = b};
+}
+
 int writeBitmap(Pixel *pixels, int imageWidth, int imageHeight,
                 const char *filename) {
   int numPixels = imageWidth * imageHeight;

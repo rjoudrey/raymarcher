@@ -1,8 +1,6 @@
 #ifndef MATH_H
 #define MATH_H
 
-#define SDF_EPSILON 0.0001
-
 typedef struct Point {
   float x, y, z;
 } Point;
@@ -15,6 +13,12 @@ typedef struct Ray {
   Point origin;
   Vector direction;
 } Ray;
+
+Point makePoint(float x, float y, float z);
+
+Vector makeVector(float x, float y, float z);
+
+Ray makeRay(Point origin, Vector direction);
 
 float min(float a, float b);
 
@@ -31,6 +35,14 @@ float vectorLength(Vector vector);
 float dotProduct(Vector a, Vector b);
 
 Vector normalizedVector(Vector vector);
+
+Vector vectorFromPointToPoint(Point start, Point end);
+
+Vector vectorFromOriginToPoint(Point point);
+
+Point vectorToPoint(Vector vector);
+
+Vector directionFromPointToPoint(Point start, Point end);
 
 Vector directionFromPointToPoint(Point start, Point end);
 
@@ -51,7 +63,14 @@ Vector normalForPointAndSDF(Point p, SDF SDF);
  * https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
  */
 
+// Returns the union of two signed distance function values.
+float unionOp(float v1, float v2);
+
 // The signed distance function for a sphere with the specified radius.
 float sphereSDF(Point p, float radius);
+
+// The signed distance function for a plane with the specified normal and
+// h-value.
+float planeSDF(Point p, Vector normal, float h);
 
 #endif /* MATH_H */

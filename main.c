@@ -73,17 +73,18 @@ int main() {
         // to start a little ways away from the intersection point so that we
         // don't just hit the same intersection point again.
         Point nearbyIntPoint =
-            addVectorToPoint(intPoint, intPointToLightDir, 0.01);
-        Ray intPointToLightRay = makeRay(nearbyIntPoint, intPointToLightDir);
-        float shadow = 1.0 - (float)rayMarch(intPointToLightRay, sceneSDF, 0);
+            addVectorToPoint(intPoint, intPointToLightDir, 0.001);
+        float shadow =
+            lerp(softShadow(nearbyIntPoint, kLightPosition, sceneSDF, 4.0), 0.2,
+                 1.0);
 
         // dp = 1.0 means the vectors have the same direction.
         // dp = -1.0 means the vectors have opposite directions.
         float dp = dotProduct(normal, intPointToLightDir);
         float specular = invLerp(dp, kSpecularCutoff, 1.0) * kSpecularColor;
-        float diffuse = max(dp, 0.0) * kMaxDiffuseColor;
+        float diffuse = max(dp, 0.0) * shadow * kMaxDiffuseColor;
         float normalizedBrightness = kAmbientColor + diffuse + specular;
-        colorSum += normalizedBrightness * kMaxBrightness * shadow;
+        colorSum += normalizedBrightness * kMaxBrightness;
       }
 
       int pixelIndex = pixelRow * kNumPixelRows + pixelColumn;

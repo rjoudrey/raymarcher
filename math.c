@@ -144,6 +144,21 @@ Vector normalForPointAndSDF(Point p, SDF SDF) {
   return normalizedVector((Vector){.x = x, .y = y, .z = z});
 }
 
+float softShadow(Point start, Point end, SDF SDF, float k) {
+  float result = 1.0;
+  Vector startToEnd = vectorFromPointToPoint(start, end);
+  for (float t = 0.0; t < 1.0;) {
+    Point p = addVectorToPoint(start, startToEnd, t);
+    float d = SDF(p);
+    if (d <= SDF_EPSILON) {
+      return 0.0;
+    }
+    result = min(result, k * d / t);
+    t += d;
+  }
+  return result;
+}
+
 float unionOp(float v1, float v2) { return min(v1, v2); }
 
 float sphereSDF(Point p, float radius) {

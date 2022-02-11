@@ -77,6 +77,8 @@ int rayMarch(Ray ray, SDF SDF, Point *intersectionPoint);
 // approach of integrating over the signed distance function.
 Vector normalForPointAndSDF(Point p, SDF SDF);
 
+float softShadow(Point start, Point end, SDF SDF, float k);
+
 /**
  * Signed distance functions. More info at:
  * https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm

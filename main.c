@@ -20,52 +20,6 @@ const float kSpecularColor = 0.04;
 const float kSpecularCutoff = 0.99;
 const int kMaxBrightness = 0xFF;
 
-typedef struct Transform {
-  float a, b, c;
-  float d, e, f;
-  float g, h, i;
-} Transform;
-
-Transform makeTransform(float a, float b, float c, float d, float e, float f,
-                        float g, float h, float i) {
-  return (Transform){
-      .a = a, .b = b, .c = c, .d = d, .e = e, .f = f, .g = g, .h = h, .i = i};
-}
-
-Transform makeRotationX(float t) {
-  return makeTransform(1.0, 0.0, 0.0, 0.0, cos(t), -sin(t), 0.0, sin(t),
-                       cos(t));
-};
-
-Transform makeRotationZ(float t) {
-  return makeTransform(cos(t), -sin(t), 0.0, sin(t), cos(t), 0.0, 0.0, 0.0,
-                       1.0);
-};
-
-Transform makeRotationY(float t) {
-  return makeTransform(cos(t), 0.0, sin(t), 0.0, 1.0, 0.0, -sin(t), 0, cos(t));
-};
-
-Vector applyTransform(Transform t, Vector v) {
-  float x = t.a * v.x + t.b * v.y + t.c * v.z;
-  float y = t.d * v.x + t.e * v.y + t.f * v.z;
-  float z = t.g * v.x + t.h * v.y + t.i * v.z;
-  return makeVector(x, y, z);
-}
-
-Transform combineTransforms(Transform t1, Transform t2) {
-  float a = t1.a * t2.a + t1.b * t2.d + t1.c * t2.g;
-  float b = t1.a * t2.b + t1.b * t2.e + t1.c * t2.h;
-  float c = t1.a * t2.c + t1.b * t2.f + t1.c * t2.i;
-  float d = t1.d * t2.a + t1.e * t2.d + t1.f * t2.g;
-  float e = t1.d * t2.b + t1.e * t2.e + t1.f * t2.h;
-  float f = t1.d * t2.c + t1.e * t2.f + t1.f * t2.i;
-  float g = t1.g * t2.a + t1.h * t2.d + t1.i * t2.g;
-  float h = t1.g * t2.b + t1.h * t2.e + t1.i * t2.h;
-  float i = t1.g * t2.c + t1.h * t2.f + t1.i * t2.i;
-  return makeTransform(a, b, c, d, e, f, g, h, i);
-}
-
 float sceneSDF(Point p) {
   Transform transform =
       combineTransforms(makeRotationY(0.7), makeRotationX(-0.3));
@@ -115,7 +69,7 @@ int main() {
         Vector intPointToLightDir =
             directionFromPointToPoint(intPoint, kLightPosition);
 
-        // When raymarching from the intersection point to the shadow, we need
+        // When raymarching from the intersection point to the light, we need
         // to start a little ways away from the intersection point so that we
         // don't just hit the same intersection point again.
         Point nearbyIntPoint =

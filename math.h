@@ -14,6 +14,12 @@ typedef struct Ray {
   Vector direction;
 } Ray;
 
+typedef struct Transform {
+  float a, b, c;
+  float d, e, f;
+  float g, h, i;
+} Transform;
+
 Point makePoint(float x, float y, float z);
 
 Vector makeVector(float x, float y, float z);
@@ -47,6 +53,19 @@ Vector directionFromPointToPoint(Point start, Point end);
 Point addVectorToPoint(Point p, Vector v, float t);
 
 float pointDistanceFromOrigin(Point target);
+
+Transform makeTransform(float a, float b, float c, float d, float e, float f,
+                        float g, float h, float i);
+
+Transform makeRotationX(float t);
+
+Transform makeRotationZ(float t);
+
+Transform makeRotationY(float t);
+
+Vector applyTransform(Transform t, Vector v);
+
+Transform combineTransforms(Transform t1, Transform t2);
 
 // Travels from the ray's origin in the ray's direction, passing the current
 // point into the specified SDF function. Returns 1 if an intersection was

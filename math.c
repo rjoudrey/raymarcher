@@ -73,6 +73,10 @@ float pointDistanceFromOrigin(Point target) {
   return vectorLength(vectorFromOriginToPoint(target));
 }
 
+Point addVectorToPoint(Point p, Vector v, float t) {
+  return makePoint(p.x + v.x * t, p.y + v.y * t, p.z + v.z * t);
+}
+
 int rayMarch(Ray ray, SDF SDF, Point *intersectionPoint) {
   Point point = ray.origin;
   for (int i = 0; i < 64; ++i) {

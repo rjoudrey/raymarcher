@@ -44,7 +44,7 @@ Point vectorToPoint(Vector vector);
 
 Vector directionFromPointToPoint(Point start, Point end);
 
-Vector directionFromPointToPoint(Point start, Point end);
+Point addVectorToPoint(Point p, Vector v, float t);
 
 float pointDistanceFromOrigin(Point target);
 

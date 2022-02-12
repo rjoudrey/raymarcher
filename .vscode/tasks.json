@@ -23,6 +23,30 @@
 			],
 			"group": "build",
 			"detail": "compiler: /usr/bin/gcc"
+		},
+		{
+			"type": "cppbuild",
+			"label": "Build main (HQ)",
+			"command": "/usr/bin/gcc",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-DHQ",
+				"-O3",
+				"-o",
+				"out/mainHQ",
+				"main.c",
+				"math.c",
+				"bitmap.c",
+				"-lm",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: /usr/bin/gcc"
 		}
 	]
 }

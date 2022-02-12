@@ -9,6 +9,15 @@
             "args": [],
             "cwd": "${workspaceFolder}/out",
             "preLaunchTask": "Build main"
-        }
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Run HQ",
+            "program": "out/mainHQ",
+            "args": [],
+            "cwd": "${workspaceFolder}/out",
+            "preLaunchTask": "Build main (HQ)"
+        },
     ]
 }

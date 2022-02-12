@@ -1,6 +1,8 @@
 #ifndef MATH_H
 #define MATH_H
 
+#include <stdbool.h>
+
 typedef struct Point {
   float x, y, z;
 } Point;
@@ -20,11 +22,17 @@ typedef struct Transform {
   float g, h, i;
 } Transform;
 
+typedef struct Color {
+  float r, g, b;
+} Color;
+
 Point makePoint(float x, float y, float z);
 
 Vector makeVector(float x, float y, float z);
 
 Ray makeRay(Point origin, Vector direction);
+
+Color makeColor(float r, float g, float b);
 
 float min(float a, float b);
 
@@ -42,13 +50,17 @@ float dotProduct(Vector a, Vector b);
 
 Vector normalizedVector(Vector vector);
 
+Vector scaledVector(Vector v, float t);
+
+Vector vectorSubtract(Vector a, Vector b);
+
 Vector vectorFromPointToPoint(Point start, Point end);
 
 Vector vectorFromOriginToPoint(Point point);
 
-Point vectorToPoint(Vector vector);
-
 Vector directionFromPointToPoint(Point start, Point end);
+
+Point vectorToPoint(Vector vector);
 
 Point addVectorToPoint(Point p, Vector v, float t);
 
@@ -67,11 +79,17 @@ Vector applyTransform(Transform t, Vector v);
 
 Transform combineTransforms(Transform t1, Transform t2);
 
+Color mixColors(Color c1, Color c2, float t1, float t2);
+
+Color addColors(Color c1, Color c2);
+
+Color scaleColor(Color c, float t);
+
 // Travels from the ray's origin in the ray's direction, passing the current
 // point into the specified SDF function. Returns 1 if an intersection was
 // found, and returns the intersection point.
 typedef float (*SDF)(Point);
-int rayMarch(Ray ray, SDF SDF, Point *intersectionPoint);
+bool rayMarch(Ray ray, SDF SDF, Point *intersectionPoint);
 
 // Finds the normal for a point. This is a implemented using the generic
 // approach of integrating over the signed distance function.

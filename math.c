@@ -5,6 +5,12 @@
 
 #define SDF_EPSILON 0.0001
 
+#if HQ
+const int kNumRayMarchSteps = 1024;
+#else
+const int kNumRayMarchSteps = 128;
+#endif
+
 const Point kPointOrigin = {.x = 0.0, .y = 0.0, .z = 0.0};
 
 Point makePoint(float x, float y, float z) {
@@ -17,6 +23,10 @@ Vector makeVector(float x, float y, float z) {
 
 Ray makeRay(Point origin, Vector direction) {
   return (Ray){.origin = origin, .direction = direction};
+}
+
+Color makeColor(float r, float g, float b) {
+  return (Color){.r = r, .g = g, .b = b};
 }
 
 float min(float a, float b) { return a < b ? a : b; }
@@ -47,6 +57,14 @@ Vector normalizedVector(Vector vector) {
   float length = vectorLength(vector);
   return (Vector){
       .x = vector.x / length, .y = vector.y / length, .z = vector.z / length};
+}
+
+Vector scaledVector(Vector v, float t) {
+  return makeVector(v.x * t, v.y * t, v.z * t);
+}
+
+Vector vectorSubtract(Vector a, Vector b) {
+  return makeVector(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
 Vector vectorFromPointToPoint(Point start, Point end) {
@@ -117,21 +135,34 @@ Transform combineTransforms(Transform t1, Transform t2) {
   return makeTransform(a, b, c, d, e, f, g, h, i);
 }
 
-int rayMarch(Ray ray, SDF SDF, Point *intersectionPoint) {
+Color mixColors(Color c1, Color c2, float t1, float t2) {
+  return makeColor(c1.r * t1 + c2.r * t2, c1.g * t1 + c2.g * t2,
+                   c1.b * t1 + c2.b * t2);
+}
+
+Color addColors(Color c1, Color c2) {
+  return makeColor(c1.r + c2.r, c1.g + c2.g, c1.b + c2.b);
+}
+
+Color scaleColor(Color c, float t) {
+  return makeColor(c.r * t, c.g * t, c.b * t);
+}
+
+bool rayMarch(Ray ray, SDF SDF, Point *intersectionPoint) {
   Point point = ray.origin;
-  for (int i = 0; i < 64; ++i) {
+  for (int i = 0; i < kNumRayMarchSteps; ++i) {
     float d = SDF(point);
     if (d <= SDF_EPSILON) {
       if (intersectionPoint) {
         *intersectionPoint = point;
       }
-      return 1;
+      return true;
     }
     point = (Point){.x = point.x + ray.direction.x * d,
                     .y = point.y + ray.direction.y * d,
                     .z = point.z + ray.direction.z * d};
   }
-  return 0;
+  return false;
 }
 
 Vector normalForPointAndSDF(Point p, SDF SDF) {

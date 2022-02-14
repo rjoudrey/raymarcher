@@ -50,9 +50,9 @@ float dotProduct(Vector a, Vector b);
 
 Vector normalizedVector(Vector vector);
 
-Vector scaledVector(Vector v, float t);
+Vector scaleVector(Vector v, float t);
 
-Vector vectorSubtract(Vector a, Vector b);
+Vector subtractVectors(Vector a, Vector b);
 
 Vector vectorFromPointToPoint(Point start, Point end);
 
@@ -84,6 +84,10 @@ Color mixColors(Color c1, Color c2, float t1, float t2);
 Color addColors(Color c1, Color c2);
 
 Color scaleColor(Color c, float t);
+
+Color multiplyColors(Color c1, Color c2);
+
+Color clampColor(Color c, float lowerBound, float upperBound);
 
 // Travels from the ray's origin in the ray's direction, passing the current
 // point into the specified SDF function. Returns 1 if an intersection was

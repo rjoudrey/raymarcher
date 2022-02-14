@@ -59,11 +59,11 @@ Vector normalizedVector(Vector vector) {
       .x = vector.x / length, .y = vector.y / length, .z = vector.z / length};
 }
 
-Vector scaledVector(Vector v, float t) {
+Vector scaleVector(Vector v, float t) {
   return makeVector(v.x * t, v.y * t, v.z * t);
 }
 
-Vector vectorSubtract(Vector a, Vector b) {
+Vector subtractVectors(Vector a, Vector b) {
   return makeVector(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
@@ -146,6 +146,17 @@ Color addColors(Color c1, Color c2) {
 
 Color scaleColor(Color c, float t) {
   return makeColor(c.r * t, c.g * t, c.b * t);
+}
+
+Color multiplyColors(Color c1, Color c2) {
+  return makeColor(c1.r * c2.r, c1.g * c2.g, c1.b * c2.b);
+}
+
+Color clampColor(Color c, float lowerBound, float upperBound) {
+  float r = clamp(c.r, lowerBound, upperBound);
+  float g = clamp(c.g, lowerBound, upperBound);
+  float b = clamp(c.b, lowerBound, upperBound);
+  return makeColor(r, g, b);
 }
 
 bool rayMarch(Ray ray, SDF SDF, Point *intersectionPoint) {

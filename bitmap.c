@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
+#include <string.h>
 
 #pragma pack(push, 1)
 typedef struct {
@@ -58,8 +59,8 @@ int writeBitmap(Pixel *pixels, int imageWidth, int imageHeight,
   coreHeader.numImportantColorsUsed = 0;
 
   FILE *imageFile = fopen(filename, "w+");
-  if (errno != 0) {
-    printf("Failed to open image file: %d", errno);
+  if (!imageFile) {
+    printf("Failed to open image file: %d (%s)\n", errno, strerror(errno));
     return 1;
   }
 
